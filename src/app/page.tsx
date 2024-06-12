@@ -1,4 +1,5 @@
 import { CreatePost } from "~/app/_components/create-post";
+import { ErrorButton } from "./_components/error-button";
 
 export default async function Home() {
   return (
@@ -12,6 +13,7 @@ async function CrudShowcase() {
   return (
     <div className="w-full max-w-xs">
       <CreatePost />
+      <ErrorButton />
     </div>
   );
 }
