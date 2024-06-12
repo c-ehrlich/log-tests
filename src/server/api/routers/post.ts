@@ -2,11 +2,6 @@ import { z } from "zod";
 
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 
-let post = {
-  id: 1,
-  name: "Hello World",
-};
-
 export const postRouter = createTRPCRouter({
   hello: publicProcedure
     .input(z.object({ text: z.string() }))
@@ -16,17 +11,21 @@ export const postRouter = createTRPCRouter({
       };
     }),
 
-  create: publicProcedure
-    .input(z.object({ name: z.string().min(1) }))
-    .mutation(async ({ input }) => {
-      // simulate a slow db call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      post = { id: post.id + 1, name: input.name };
-      return post;
-    }),
-
-  getLatest: publicProcedure.query(() => {
-    return post;
+  create: publicProcedure.mutation(async () => {
+    console.log("multiline log:\nnext line");
+    console.log(
+      `object log: ${JSON.stringify({ foo: "foo", bar: "bar" }, null, 2)}`,
+    );
+    try {
+      throw new Error("foo");
+    } catch (e) {
+      // @ts-expect-error any
+      console.error(e.stack);
+    }
+    try {
+      throw new Error("bar");
+    } catch (e) {
+      console.error(JSON.stringify(e));
+    }
   }),
 });
